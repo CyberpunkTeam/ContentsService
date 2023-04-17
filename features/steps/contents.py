@@ -48,3 +48,45 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     assert context.response.status_code == 201
+
+
+@given('que quiero crear un contenido para el equipo "{team_name}"')
+def step_impl(context, team_name):
+    """
+    :type context: behave.runner.Context
+    """
+    context.vars["tid"] = len(team_name)
+
+
+@when('escribo la publicacion "{title}"')
+def step_impl(context, title):
+    """
+    :type context: behave.runner.Context
+    """
+    context.vars["title"] = title
+
+
+@step("la publico")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    url = "/contents"
+    body = {"author_uid": "1", "title": context.vars["title"], "href": "mock"}
+    tid = context.vars.get("tid")
+    if tid is not None:
+        body["tid"] = tid
+
+    context.response = context.client.post(url, json=body, headers=headers)
+
+
+@then("se me informa que se publico exitosamente")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    assert context.response.status_code == 201
