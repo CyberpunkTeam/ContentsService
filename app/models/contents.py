@@ -13,6 +13,7 @@ class Contents(BaseModel):
     href: str
     created_date: Optional[str]
     updated_date: Optional[str]
+    cover_image: Optional[str]
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))
@@ -27,6 +28,7 @@ class Contents(BaseModel):
             "created_date": str,
             "updated_date": str,
             "title": str,
+            "cover_image": str,
         }
 
     @staticmethod
