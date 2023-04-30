@@ -25,3 +25,19 @@ class ContentsController:
         if cid:
             return result[0]
         return result
+
+    @staticmethod
+    def delete(repository, cid):
+        repository.remove(cid)
+        return {"message": "content deleted"}
+
+    @staticmethod
+    def put(repository, cid, content_update):
+        content_update.cid = cid
+        local = datetime.now()
+        content_update.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")
+        if repository.put(content_update):
+            result = repository.get(cid=cid)
+            return result[0]
+        else:
+            raise HTTPException(status_code=500, detail="Error to update content")

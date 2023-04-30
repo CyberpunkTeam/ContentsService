@@ -1,6 +1,7 @@
 from cpunk_mongo.db import DataBase
 
 from app.models.contents import Contents
+from app.requests.content_update import ContentsUpdate
 
 
 class ContentsRepository(DataBase):
@@ -32,3 +33,9 @@ class ContentsRepository(DataBase):
     @staticmethod
     def create_repository(url, database_name):
         return ContentsRepository(url, database_name)
+
+    def remove(self, cid):
+        return self.delete(self.COLLECTION_NAME, "cid", cid)
+
+    def put(self, content: ContentsUpdate):
+        return self.update(self.COLLECTION_NAME, "cid", content.cid, content)

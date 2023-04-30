@@ -5,6 +5,8 @@ Feature: CRUD Contents
 
     When escribo la publicacion "Agiles methologies"
 
+    And portada con la imagen "cover.png"
+
     And la publico
 
     Then se me informa que se publico exitosamente
@@ -18,3 +20,18 @@ Feature: CRUD Contents
     And la publico
 
     Then se me informa que se publico exitosamente
+
+
+  Scenario: Update content
+    Given que existe un contenido con titulo "Agile methodologies", portada "cover.png"
+
+    When edito el titulo a "New Agile"
+
+    Then veo que se cambio el titulo a "New Agile"
+
+  Scenario: Delete content
+    Given que existe un contenido con titulo "Agile methodologies", portada "cover.png"
+
+    When elimino el contenido
+
+    Then se me informa que se elimino correctamente
