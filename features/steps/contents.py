@@ -172,3 +172,69 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     assert context.response.status_code == 200
+
+
+@step("agrego mi like al contenido")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+    uid = "mock"
+    context.vars["uid"] = uid
+    url = f"/contents/{context.vars['cid']}/likes/{uid}"
+
+    response = context.client.post(url, headers=headers)
+
+    assert response.status_code == 201
+
+
+@then("puedo ver que el contenido tiene mi like")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    url = f"/contents/{context.vars['cid']}"
+
+    response = context.client.get(url, headers=headers)
+
+    assert response.status_code == 200
+    content = response.json()
+    assert context.vars["uid"] in content["likes"]
+
+
+@when("saco mi like al contenido")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+    uid = "mock"
+    context.vars["uid"] = uid
+    url = f"/contents/{context.vars['cid']}/likes/{uid}"
+
+    response = context.client.delete(url, headers=headers)
+
+    assert response.status_code == 200
+
+
+@then("puedo ver que el contenido no tiene mi like")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    url = f"/contents/{context.vars['cid']}"
+
+    response = context.client.get(url, headers=headers)
+
+    assert response.status_code == 200
+    content = response.json()
+    assert not (context.vars["uid"] in content["likes"])

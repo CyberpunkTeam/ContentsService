@@ -2,6 +2,7 @@ from datetime import datetime
 
 from fastapi import HTTPException
 from app.models.contents import Contents
+from app.requests.content_update import ContentsUpdate
 
 
 class ContentsController:
@@ -11,6 +12,7 @@ class ContentsController:
         content.created_date = local.strftime("%d-%m-%Y:%H:%M:%S")
         content.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")
         content.cid = Contents.get_cid()
+        content.likes = []
         ok = repository.insert(content)
         if not ok:
             raise HTTPException(status_code=500, detail="Error saving")
@@ -41,3 +43,20 @@ class ContentsController:
             return result[0]
         else:
             raise HTTPException(status_code=500, detail="Error to update content")
+
+    @staticmethod
+    def add_like(repository, cid, uid):
+        results = repository.get(cid=cid)
+        content = results[0]
+        content.likes.append(uid)
+
+        content_update = ContentsUpdate(cid=content.cid, likes=content.likes)
+        return ContentsController.put(repository, cid, content_update)
+
+    @staticmethod
+    def remove_like(repository, cid, uid):
+        results = repository.get(cid=cid)
+        content = results[0]
+        content.likes.remove(uid)
+        content_update = ContentsUpdate(cid=content.cid, likes=content.likes)
+        return ContentsController.put(repository, cid, content_update)
