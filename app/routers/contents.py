@@ -39,3 +39,20 @@ async def put_content(cid: str, content_update: ContentsUpdate):
     return ContentsController.put(
         contents_repository, cid=cid, content_update=content_update
     )
+
+
+@router.post(
+    "/contents/{cid}/likes/{uid}",
+    tags=["contents"],
+    response_model=Contents,
+    status_code=201,
+)
+async def add_like(cid: str, uid: str):
+    return ContentsController.add_like(contents_repository, cid=cid, uid=uid)
+
+
+@router.delete(
+    "/contents/{cid}/likes/{uid}", tags=["contents"], response_model=Contents
+)
+async def remove_like(cid: str, uid: str):
+    return ContentsController.remove_like(contents_repository, cid=cid, uid=uid)

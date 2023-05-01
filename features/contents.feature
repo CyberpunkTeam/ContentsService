@@ -35,3 +35,20 @@ Feature: CRUD Contents
     When elimino el contenido
 
     Then se me informa que se elimino correctamente
+
+
+  Scenario: Add like to content
+    Given que existe un contenido con titulo "Agile methodologies", portada "cover.png"
+
+    When agrego mi like al contenido
+
+    Then puedo ver que el contenido tiene mi like
+
+  Scenario: Add like to content
+    Given que existe un contenido con titulo "Agile methodologies", portada "cover.png"
+
+    And agrego mi like al contenido
+
+    When saco mi like al contenido
+
+    Then puedo ver que el contenido no tiene mi like

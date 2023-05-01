@@ -1,6 +1,6 @@
 import uuid
 from json import loads
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
@@ -14,6 +14,7 @@ class Contents(BaseModel):
     created_date: Optional[str]
     updated_date: Optional[str]
     cover_image: Optional[str]
+    likes: Optional[List[str]]
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))
@@ -29,6 +30,7 @@ class Contents(BaseModel):
             "updated_date": str,
             "title": str,
             "cover_image": str,
+            "likes": list,
         }
 
     @staticmethod
