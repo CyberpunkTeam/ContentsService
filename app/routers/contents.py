@@ -20,7 +20,9 @@ async def create_content(content: Contents):
 
 
 @router.get("/contents/", tags=["contents"], response_model=List[Contents])
-async def list_contents(author_uid: str = None, tid: str = None):
+async def list_contents(author_uid: str = None, tid: str = None, search: str = None):
+    if search is not None:
+        return ContentsController.search(contents_repository, search)
     return ContentsController.get(contents_repository, author_uid, tid)
 
 

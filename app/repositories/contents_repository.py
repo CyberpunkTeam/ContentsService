@@ -39,3 +39,6 @@ class ContentsRepository(DataBase):
 
     def put(self, content: ContentsUpdate):
         return self.update(self.COLLECTION_NAME, "cid", content.cid, content)
+
+    def search(self, fields, value):
+        return self.ilike(self.COLLECTION_NAME, fields, value, output_model=Contents)

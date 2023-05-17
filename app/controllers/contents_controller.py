@@ -60,3 +60,8 @@ class ContentsController:
         content.likes.remove(uid)
         content_update = ContentsUpdate(cid=content.cid, likes=content.likes)
         return ContentsController.put(repository, cid, content_update)
+
+    @staticmethod
+    def search(contents_repository, search):
+        fields = ["title"]
+        return contents_repository.search(fields, search)
