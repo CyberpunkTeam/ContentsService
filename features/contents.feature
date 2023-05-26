@@ -52,3 +52,11 @@ Feature: CRUD Contents
     When saco mi like al contenido
 
     Then puedo ver que el contenido no tiene mi like
+
+
+  Scenario: block content
+    Given que existe un contenido con titulo "Agile methodologies", portada "cover.png"
+
+    When cuando lo bloqueo
+
+    Then puedo ver que el contenido tiene estado bloqueado

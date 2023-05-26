@@ -4,6 +4,8 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
+from app.models.states import States
+
 
 class ContentsUpdate(BaseModel):
     cid: Optional[str]
@@ -13,6 +15,7 @@ class ContentsUpdate(BaseModel):
     updated_date: Optional[str]
     cover_image: Optional[str]
     likes: Optional[List[str]]
+    state: Optional[States]
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))

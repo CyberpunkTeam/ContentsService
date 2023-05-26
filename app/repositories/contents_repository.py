@@ -1,7 +1,7 @@
 from cpunk_mongo.db import DataBase
 
 from app.models.contents import Contents
-from app.requests.content_update import ContentsUpdate
+from app.models.requests.content_update import ContentsUpdate
 
 
 class ContentsRepository(DataBase):
@@ -15,7 +15,7 @@ class ContentsRepository(DataBase):
         else:
             super().__init__(url, db_name)
 
-    def get(self, author_uid=None, tid=None, cid=None):
+    def get(self, author_uid=None, tid=None, cid=None, state=None):
         filters = {}
 
         if cid is not None:
@@ -24,6 +24,8 @@ class ContentsRepository(DataBase):
             filters["author_uid"] = author_uid
         if tid is not None:
             filters["tid"] = tid
+        if state is not None:
+            filters["state"] = state
 
         return self.filter(self.COLLECTION_NAME, filters, output_model=Contents)
 
