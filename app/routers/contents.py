@@ -6,7 +6,7 @@ from app import config
 from app.controllers.contents_controller import ContentsController
 from app.models.contents import Contents
 from app.repositories.contents_repository import ContentsRepository
-from app.requests.content_update import ContentsUpdate
+from app.models.requests.content_update import ContentsUpdate
 
 router = APIRouter()
 
@@ -20,10 +20,12 @@ async def create_content(content: Contents):
 
 
 @router.get("/contents/", tags=["contents"], response_model=List[Contents])
-async def list_contents(author_uid: str = None, tid: str = None, search: str = None):
+async def list_contents(
+    author_uid: str = None, tid: str = None, search: str = None, state: str = None
+):
     if search is not None:
         return ContentsController.search(contents_repository, search)
-    return ContentsController.get(contents_repository, author_uid, tid)
+    return ContentsController.get(contents_repository, author_uid, tid, state)
 
 
 @router.get("/contents/{cid}", tags=["contents"], response_model=Contents)

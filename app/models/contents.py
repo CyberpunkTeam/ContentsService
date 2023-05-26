@@ -4,6 +4,8 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
+from app.models.states import States
+
 
 class Contents(BaseModel):
     cid: Optional[str]
@@ -15,6 +17,7 @@ class Contents(BaseModel):
     updated_date: Optional[str]
     cover_image: Optional[str]
     likes: Optional[List[str]]
+    state: Optional[States]
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))
@@ -31,12 +34,10 @@ class Contents(BaseModel):
             "title": str,
             "cover_image": str,
             "likes": list,
+            "state": str,
         }
 
     @staticmethod
     def get_cid():
         myuuid = uuid.uuid4()
         return str(myuuid)
-
-    def get_id(self):
-        return self.tid

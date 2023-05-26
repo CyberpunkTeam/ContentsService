@@ -95,6 +95,9 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     assert context.response.status_code == 201
+    content = context.response.json()
+    active = content.get("state")
+    assert active == "ACTIVE"
 
 
 @step('portada con la imagen "{url}"')
@@ -122,6 +125,9 @@ def step_impl(context, title, cover):
     response = context.client.post(url, json=body, headers=headers)
     assert response.status_code == 201
     context.vars["cid"] = response.json()["cid"]
+    content = response.json()
+    active = content.get("state")
+    assert active == "ACTIVE"
 
 
 @when('edito el titulo a "{new_title}"')
@@ -238,3 +244,35 @@ def step_impl(context):
     assert response.status_code == 200
     content = response.json()
     assert not (context.vars["uid"] in content["likes"])
+
+
+@when("cuando lo bloqueo")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    url = f"/contents/{context.vars['cid']}"
+    body = {
+        "state": "BLOCKED",
+    }
+
+    response = context.client.put(url, json=body, headers=headers)
+    assert response.status_code == 200
+
+
+@then("puedo ver que el contenido tiene estado bloqueado")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+
+    url = f"/contents/{context.vars['cid']}"
+
+    response = context.client.get(url)
+    assert response.status_code == 200
+    content = response.json()
+    active = content.get("state")
+    assert active == "BLOCKED"

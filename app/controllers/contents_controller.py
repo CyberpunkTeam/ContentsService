@@ -2,7 +2,8 @@ from datetime import datetime
 
 from fastapi import HTTPException
 from app.models.contents import Contents
-from app.requests.content_update import ContentsUpdate
+from app.models.states import States
+from app.models.requests.content_update import ContentsUpdate
 
 
 class ContentsController:
@@ -12,6 +13,7 @@ class ContentsController:
         content.created_date = local.strftime("%d-%m-%Y:%H:%M:%S")
         content.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")
         content.cid = Contents.get_cid()
+        content.state = States.ACTIVE
         content.likes = []
         ok = repository.insert(content)
         if not ok:
@@ -19,8 +21,8 @@ class ContentsController:
         return content
 
     @staticmethod
-    def get(repository, author_uid=None, tid=None, cid=None):
-        result = repository.get(author_uid=author_uid, tid=tid, cid=cid)
+    def get(repository, author_uid=None, tid=None, cid=None, state=None):
+        result = repository.get(author_uid=author_uid, tid=tid, cid=cid, state=None)
         if len(result) == 0 and cid is not None:
             raise HTTPException(status_code=404, detail="Item not found")
 
