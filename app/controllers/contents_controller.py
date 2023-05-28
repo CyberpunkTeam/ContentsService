@@ -23,7 +23,7 @@ class ContentsController:
     @staticmethod
     def get(repository, author_uid=None, tid=None, cid=None, state=None):
         result = repository.get(author_uid=author_uid, tid=tid, cid=cid, state=state)
-        if len(result) == 0 and cid is not None:
+        if len(result) == 0 and cid is not None and state is None:
             raise HTTPException(status_code=404, detail="Item not found")
 
         if cid:
