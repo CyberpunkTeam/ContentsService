@@ -25,7 +25,7 @@ async def list_contents(
 ):
     if search is not None:
         return ContentsController.search(contents_repository, search)
-    return ContentsController.get(contents_repository, author_uid, tid, state)
+    return ContentsController.get(contents_repository, author_uid, tid, state=state)
 
 
 @router.get("/contents/{cid}", tags=["contents"], response_model=Contents)
